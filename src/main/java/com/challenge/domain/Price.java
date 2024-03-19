@@ -37,12 +37,6 @@ public class Price {
     @Column(name = "CURR", nullable = false, length = 3)
     private String currency;
 
-    // Standard getters and setters
-
-    public Long getId() {
-        return id;
-    }
-
     public void setId(Long id) {
         this.id = id;
     }
