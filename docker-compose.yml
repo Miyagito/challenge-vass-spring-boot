@@ -1,0 +1,16 @@
+version: '3.8'
+
+services:
+  challenge-app:
+    image: challenge-app
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8080:8080"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:h2:mem:testdb;DB_CLOSE_DELAY=-1;MODE=MySQL
+      SPRING_DATASOURCE_USERNAME: JZ
+      SPRING_DATASOURCE_PASSWORD: 1234
+    volumes:
+      - ./target/challenge-0.0.1-SNAPSHOT.jar:/app/app.jar
