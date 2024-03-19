@@ -10,15 +10,14 @@ This repository contains the Spring Boot application for the Challenge Project, 
 
 ## Running the Application
 To run the application locally, you can use the following command:
-
-```bash
+```
 mvn spring-boot:run
 ```
-
-```For running the dockerized version, use:
+For running the dockerized version, use:
+```
 docker-compose up or docker-compose up --build
 ```
-
+## Project Structure
 ```
 challenge/
 ├── .mvn/
