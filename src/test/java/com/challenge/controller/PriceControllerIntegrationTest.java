@@ -17,7 +17,62 @@ public class PriceControllerIntegrationTest {
     @Autowired
     private MockMvc mockMvc;
 
-    // Prueba para obtener el precio aplicable para una fecha, un producto y una marca válidos
+    // Test 1: petición a las 10:00 del día 14 del producto 35455 para la brand 1 (ZARA)
+    @Test
+    public void shouldReturnPriceForJune14At1000() throws Exception {
+        mockMvc.perform(get("/api/prices")
+                        .param("applicationDate", "2020-06-14T10:00:00")
+                        .param("productId", "35455")
+                        .param("brandId", "1"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.price").value(35.50));
+    }
+
+    // Test 2: petición a las 16:00 del día 14 del producto 35455 para la brand 1 (ZARA)
+    @Test
+    public void shouldReturnPriceForJune14At1600() throws Exception {
+        mockMvc.perform(get("/api/prices")
+                        .param("applicationDate", "2020-06-14T16:00:00")
+                        .param("productId", "35455")
+                        .param("brandId", "1"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.price").value(25.45));
+    }
+
+    // Test 3: petición a las 21:00 del día 14 del producto 35455 para la brand 1 (ZARA)
+    @Test
+    public void shouldReturnPriceForJune14At2100() throws Exception {
+        mockMvc.perform(get("/api/prices")
+                        .param("applicationDate", "2020-06-14T21:00:00")
+                        .param("productId", "35455")
+                        .param("brandId", "1"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.price").value(35.50));
+    }
+
+    // Test 4: petición a las 10:00 del día 15 del producto 35455 para la brand 1 (ZARA)
+    @Test
+    public void shouldReturnPriceForJune15At1000() throws Exception {
+        mockMvc.perform(get("/api/prices")
+                        .param("applicationDate", "2020-06-15T10:00:00")
+                        .param("productId", "35455")
+                        .param("brandId", "1"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.price").value(30.50));
+    }
+
+    // Test 5: petición a las 21:00 del día 16 del producto 35455 para la brand 1 (ZARA)
+    @Test
+    public void shouldReturnPriceForJune16At2100() throws Exception {
+        mockMvc.perform(get("/api/prices")
+                        .param("applicationDate", "2020-06-16T21:00:00")
+                        .param("productId", "35455")
+                        .param("brandId", "1"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.price").value(38.95));
+    }
+
+    // Test 6: para obtener el precio aplicable para una fecha, un producto y una marca válidos
     @Test
     public void testGetApplicablePrice() throws Exception {
         mockMvc.perform(get("/api/prices")
@@ -33,7 +88,7 @@ public class PriceControllerIntegrationTest {
                 .andExpect(jsonPath("$.price").exists());
     }
 
-    // Prueba para verificar que se maneje correctamente un ID de producto inválido
+    // Test 7: para verificar que se maneje correctamente un ID de producto inválido
     @Test
     public void testGetApplicablePriceWithInvalidProductId() throws Exception {
         mockMvc.perform(get("/api/prices")
@@ -43,7 +98,7 @@ public class PriceControllerIntegrationTest {
                 .andExpect(status().isBadRequest());
     }
 
-    // Prueba para verificar que se maneje correctamente una fecha de aplicación inválida
+    // Test 8: para verificar que se maneje correctamente una fecha de aplicación inválida
     @Test
     public void testGetApplicablePriceWithInvalidDate() throws Exception {
         mockMvc.perform(get("/api/prices")
@@ -53,7 +108,7 @@ public class PriceControllerIntegrationTest {
                 .andExpect(status().isBadRequest());
     }
 
-    // Prueba para verificar que se maneje correctamente un ID de marca inválido
+    // Test 9: para verificar que se maneje correctamente un ID de marca inválido
     @Test
     public void testGetApplicablePriceWithInvalidBrandId() throws Exception {
         mockMvc.perform(get("/api/prices")
@@ -62,4 +117,15 @@ public class PriceControllerIntegrationTest {
                         .param("brandId", "invalid-id"))
                 .andExpect(status().isBadRequest());
     }
+
+    // Test 10: debe retornar not found cuando el precio no existe
+    @Test
+    public void shouldReturnNotFoundWhenPriceDoesNotExist() throws Exception {
+        mockMvc.perform(get("/api/prices")
+                        .param("applicationDate", "2020-06-14T10:00:00")
+                        .param("productId", "35455")
+                        .param("brandId", "2"))
+                .andExpect(status().isNotFound());
+    }
+
 }
